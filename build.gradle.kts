@@ -14,6 +14,11 @@ dependencies {
     // logger
     implementation("ch.qos.logback:logback-classic:1.4.5")
     implementation("ch.qos.logback:logback-core:1.4.5")
+    // rest client
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    // json
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.0")
+    // test
     testImplementation("junit:junit:4.13.2")
 }
 
