@@ -7,6 +7,7 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    maven("https://s01.oss.sonatype.org/content/repositories/snapshots/")
 }
 
 dependencies {
@@ -18,6 +19,8 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.10.0")
     // json
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.0")
+    // config
+    implementation("io.github.realyusufismail:jconfig:1.0.9-SNAPSHOT")
     // test
     testImplementation("junit:junit:4.13.2")
 }

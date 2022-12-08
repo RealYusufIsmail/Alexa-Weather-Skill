@@ -2,6 +2,7 @@ package io.github.realyusufismail.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.realyusufismail.jconfig.util.JConfigUtils;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -19,7 +20,7 @@ public class WeatherRetriever {
                 .addQueryParameter("contentType", "json")
                 .addQueryParameter("unitGroup", "metric")
                 .addQueryParameter("locationMode", "single")
-                .addQueryParameter("key", "1PYNQ6AWUDJE9AFERDCHJHSXK")
+                .addQueryParameter("key", JConfigUtils.getString("weatherKey"))
                 .addQueryParameter("locations", city + ",Uk");
         String url = urlBuilder.build().toString();
 
@@ -27,7 +28,7 @@ public class WeatherRetriever {
                 .url(url)
                 .build();
 
-        JsonNode jsonNode = null;
+        JsonNode jsonNode;
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
@@ -37,13 +38,26 @@ public class WeatherRetriever {
             return null;
         }
 
-        if (jsonNode==null) {
-            System.out.printf("No weather forecast data returned%n");
-            return null;
+        JsonNode values = jsonNode.get("location").get("values");
+
+        // get the conditions and percentage for snow and rain
+
+        for (JsonNode value : values) {
+            double snow = value.get("snow").asDouble();
+            double rain = value.get("precip").asDouble();
+            double temp = value.get("temp").asDouble();
+            String conditions = value.get("conditions").asText();
+            if (snow > 0 && rain > 0) {
+                return conditions + " with " + snow + "cm of snow and " + rain + "mm of rain and a temperature of " + temp + " degrees";
+            } else if (snow > 0) {
+                return conditions + " with " + snow + "cm of snow and a temperature of " + temp + " degrees";
+            } else if (rain > 0) {
+                return conditions + " with " + rain + "mm of rain and a temperature of " + temp + " degrees";
+            } else {
+                return conditions + " with a temperature of " + temp + " degrees";
+            }
         }
 
-        JsonNode days = jsonNode.get("locations").get(city + ",Uk").get("values");
-        JsonNode day = days.get(0);
-        return day.get("conditions").asText();
+        return "No weather found";
     }
 }

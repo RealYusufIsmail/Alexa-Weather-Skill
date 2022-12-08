@@ -48,6 +48,7 @@ gradle-app.setting
 /tmp/
 # configs, logs and other files
 /files/
+config.json
 # plugins for the bot
 /plugins
 /libraries
