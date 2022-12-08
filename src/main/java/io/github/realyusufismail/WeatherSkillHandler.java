@@ -6,6 +6,7 @@ import com.amazon.ask.Skills;
 import io.github.realyusufismail.handlers.basic.LaunchRequestHandler;
 import io.github.realyusufismail.handlers.basic.WelcomeRequestHandler;
 
+@SuppressWarnings("unused")
 public class WeatherSkillHandler extends SkillStreamHandler {
 
     public WeatherSkillHandler() {
